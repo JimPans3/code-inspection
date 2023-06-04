@@ -1,0 +1,30 @@
+name: Build and Inspect Code
+on: [pull_request]
+jobs:
+  build_and_inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "7.0.x"
+      - name: Install ReSharper command line tools
+        shell: bash
+        run: |
+          dotnet tool install JetBrains.ReSharper.GlobalTools --global
+      - name: Inspect code with ReSharper
+        shell: bash
+        run: >
+          jb inspectcode CodeInspection.sln
+          --output=results.sarif.json
+          --format=Sarif
+          --build
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif.json
+          category: resharper-inspectcode
