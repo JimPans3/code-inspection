@@ -1,8 +1,5 @@
 name: Deploy app
-on:
-  workflow_run:
-    workflows: ["Build and Inspect Code"]
-    types: ["completed"]
+on: [pull_request]
 
 jobs:
   deploy:
