@@ -24,4 +24,4 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd .deploy
-            docker compose up -d
+            docker-compose-v2 up -d
